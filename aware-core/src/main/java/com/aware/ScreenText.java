@@ -89,7 +89,11 @@ public class ScreenText extends Aware_Sensor {
         if (PERMISSIONS_OK) {
             DEBUG = Aware.getSetting(this, Aware_Preferences.DEBUG_FLAG).equals("true");
 
-            Aware.setSetting(this, Aware_Preferences.STATUS_SCREENTEXT, true);
+            // Respect the user's/researcher's setting; don't force-enable on service restart.
+            if (!Aware.getSetting(this, Aware_Preferences.STATUS_SCREENTEXT).equals("true")) {
+                stopSelf();
+                return START_NOT_STICKY;
+            }
             if (Aware.DEBUG) Log.d(TAG, "ScreenText service active...");
 
 

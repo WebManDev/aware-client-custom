@@ -2793,6 +2793,8 @@ public class Aware extends Service {
      */
     public static void stopScreenText(Context context) {
         if (context == null) return;
+        // The static Intent can be null if the process was recreated; always stop explicitly.
+        context.stopService(new Intent(context, ScreenText.class));
         if (screenTextSrv != null) context.stopService(screenTextSrv);
     }
 

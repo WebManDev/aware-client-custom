@@ -5,5 +5,8 @@ aware-phone/release/*
 .DS_Store
 .DS_Store?
 local.properties
-*.apk
-resources/*.apk
+
+# Local data / exports (do not commit)
+screentext.db
+screentext_export/
+**/screentext_export/

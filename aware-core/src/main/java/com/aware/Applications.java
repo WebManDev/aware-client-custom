@@ -196,7 +196,20 @@ public class Applications extends AccessibilityService {
             foregroundApplicationName = getApplicationName(foregroundPackageName);
         }
 
-        if (contentBuffer.size() == TEXT_BUFFER_LIMIT){
+        final boolean screentextEnabled =
+                Aware.getSetting(getApplicationContext(), Aware_Preferences.STATUS_SCREENTEXT).equals("true")
+                        && getScreenStatus() == 0;
+
+        // If the user turned ScreenText off, do not flush any buffered content.
+        if (!screentextEnabled) {
+            if (!textBuffer.isEmpty() || !contentBuffer.isEmpty()) {
+                textBuffer.clear();
+                contentBuffer.clear();
+            }
+            currScreenText = "";
+        }
+
+        if (screentextEnabled && contentBuffer.size() == TEXT_BUFFER_LIMIT){
 
             for (ContentValues content: contentBuffer){
                 getContentResolver().insert(ScreenText_Provider.ScreenTextData.CONTENT_URI, content);
@@ -242,7 +255,7 @@ public class Applications extends AccessibilityService {
         }
 
 
-        if (Aware.getSetting(getApplicationContext(), Aware_Preferences.STATUS_SCREENTEXT).equals("true") && getScreenStatus() == 0) {
+        if (screentextEnabled) {
             // Get the current foreground app
             String currentForegroundApp = event.getPackageName().toString();
 

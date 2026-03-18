@@ -73,6 +73,43 @@ public class TestActivity extends Activity {
 //            }
 //        });
 
+        Button btnTimeLatency = findViewById(R.id.btn_test_timelatency);
+        btnTimeLatency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TestTimeLatency testTimeLatency = new TestTimeLatency();
+                testTimeLatency.test(TestActivity.this);
+            }
+        });
+
+        Button btnScreenText = findViewById(R.id.btn_run_screentext);
+        btnScreenText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Aware.setSetting(getApplicationContext(), Aware_Preferences.STATUS_SCREENTEXT, true);
+                Aware.startScreenText(getApplicationContext());
+                Toast.makeText(getApplicationContext(), "ScreenText started. Enable AWARE in Settings > Accessibility for capture.", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        Button btnStopScreenText = findViewById(R.id.btn_stop_screentext);
+        btnStopScreenText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Aware.setSetting(getApplicationContext(), Aware_Preferences.STATUS_SCREENTEXT, false);
+                Aware.stopScreenText(getApplicationContext());
+                Toast.makeText(getApplicationContext(), "ScreenText stopped. No longer collecting data.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Button btnViewData = findViewById(R.id.btn_view_data);
+        btnViewData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(TestActivity.this, ViewDataActivity.class));
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE);
         }

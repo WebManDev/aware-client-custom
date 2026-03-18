@@ -33,4 +33,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnSentimental"/>
+
+    <Button
+        android:text="Test TimeLatency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_test_timelatency"/>
+
+    <Button
+        android:text="Run ScreenText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_run_screentext"/>
+
+    <Button
+        android:text="Stop ScreenText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_stop_screentext"/>
+
+    <Button
+        android:text="View data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_view_data"/>
 </LinearLayout>
