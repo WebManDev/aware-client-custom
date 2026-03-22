@@ -279,8 +279,34 @@ public class ViewDataActivity extends Activity {
             Toast.makeText(this, "Cannot access storage.", Toast.LENGTH_LONG).show();
             return;
         }
-        File dbFile = new File(dir, "screentext.db");
-        File internalCopy = new File(getFilesDir(), "screentext.db");
+        // Export each run into a new numbered file:
+        // screentext.db, screentext2.db, screentext3.db, ...
+        int maxIdx = 0;
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                if (f == null) continue;
+                String name = f.getName();
+                if (name == null) continue;
+                if (name.equals("screentext.db")) {
+                    if (maxIdx < 1) maxIdx = 1;
+                    continue;
+                }
+                if (name.startsWith("screentext") && name.endsWith(".db")) {
+                    String mid = name.substring("screentext".length(), name.length() - ".db".length());
+                    try {
+                        int idx = Integer.parseInt(mid);
+                        if (idx > maxIdx) maxIdx = idx;
+                    } catch (NumberFormatException ignored) {}
+                }
+            }
+        }
+
+        int nextIdx = maxIdx + 1; // if none exist -> 1
+        String filename = (nextIdx == 1) ? "screentext.db" : ("screentext" + nextIdx + ".db");
+
+        File dbFile = new File(dir, filename);
+        File internalCopy = new File(getFilesDir(), filename);
 
         Cursor c = null;
         SQLiteDatabase db = null;
@@ -291,9 +317,9 @@ public class ViewDataActivity extends Activity {
                 Toast.makeText(this, "No data to export.", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             if (dbFile.exists()) dbFile.delete();
             db = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
+
             db.execSQL("CREATE TABLE IF NOT EXISTS screentext ("
                     + "_id INTEGER PRIMARY KEY,"
                     + "timestamp REAL,"

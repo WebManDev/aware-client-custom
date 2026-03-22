@@ -1,28 +1,27 @@
 
-## Your 5 consecutive queries (fill these in)
+## Completed search queries (in order) Session 1 [Google] [Typed quickly within 10-15 seconds]
 
-1. Query:
-   - Text: `Emu`
-   - Results page URL:
-   - (Optional) Result clicked URL:
+1. `Emu`
+2. `LeBron James`
+3. `michael jordan and`
+4. `basketball soccer football,. joel embiid!.?<>`
+5. `>>>< < my mega and big mcdonald`
 
-2. Query:
-   - Text: `LeBron James`
-   - Results page URL:
-   - (Optional) Result clicked URL:
 
-3. Query:
-   - Text: `michael jordan and`
-   - Results page URL:
-   - (Optional) Result clicked URL:
+## Completed search queries (in order) Session 2 [Google] [Typed quickly within 10-15 seconds]
 
-4. Query:
-   - Text: `basketball soccer football,. joel embiid!.?<>`
-   - Results page URL:
-   - (Optional) Result clicked URL:
+1. `batman`
+2. `superman`
+3. `batman`
+4. `wonderwoman`
+5. `wonderwoman`
 
-5. Query:
-   - Text: `>>>< < my mega and big mcdonald`
-   - Results page URL:
-   - (Optional) Result clicked URL:
+
+## Completed search queries (in order) Session 3 [Google] [Typed quickly within 10-15 seconds]
+
+1. `dog`
+2. `dog` (intentional repeat with a short pause)
+3. `cat`
+4. `dog`
+5. `cat` (first `cat` and last `cat` spaced differently)
 
