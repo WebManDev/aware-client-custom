@@ -18,7 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ViewDataActivity" android:label="View data" android:exported="true" />
+        <activity android:name=".ViewDataActivity" android:label="View data" android:exported="true">
+            <intent-filter>
+                <action android:name="com.aware.tests.EXPORT_DB" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

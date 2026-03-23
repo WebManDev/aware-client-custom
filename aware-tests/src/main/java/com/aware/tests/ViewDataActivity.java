@@ -38,12 +38,21 @@ public class ViewDataActivity extends Activity {
     private ListView list;
     private Uri uri;
 
+    private static final String ACTION_EXPORT_DB = "com.aware.tests.EXPORT_DB";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_data);
 
         uri = Uri.parse("content://" + getPackageName() + ".provider.screentext/screentext");
+
+        if (getIntent() != null && ACTION_EXPORT_DB.equals(getIntent().getAction())) {
+            exportToSqliteDb();
+            finish();
+            return;
+        }
+
+        setContentView(R.layout.activity_view_data);
 
         txtCount = findViewById(R.id.txt_count);
         list = findViewById(R.id.list_data);
@@ -264,8 +273,10 @@ public class ViewDataActivity extends Activity {
             writeFile(csvFile, csv.toString());
             writeFile(sqlFile, sql.toString());
 
-            String path = dir.getAbsolutePath();
-            Toast.makeText(this, "Exported " + count + " rows to:\n" + path, Toast.LENGTH_LONG).show();
+            copyFile(csvFile, new File(getFilesDir(), csvFile.getName()));
+            copyFile(sqlFile, new File(getFilesDir(), sqlFile.getName()));
+
+            Toast.makeText(this, "Exported " + count + " rows:\n" + csvFile.getName() + "\n" + sqlFile.getName(), Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             Toast.makeText(this, "Export failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
         } finally {
