@@ -162,3 +162,73 @@ Data is **already stored in a SQLite database** on the device: table `screentext
 | Export            | Tap "Export to CSV / SQL" → files in app Documents folder             |
 | Get files to PC   | Device File Explorer or `adb pull` from path in toast                  |
 | Put into MySQL    | Run the exported .sql file, or create table + `LOAD DATA` from CSV     |
+
+---
+
+## 7. Rebuild the test app (ScreenText UI)
+
+From the repo root (`aware-client/`):
+
+```bash
+export ANDROID_HOME=~/Library/Android/sdk
+export PATH="$ANDROID_HOME/platform-tools:$PATH"
+
+./gradlew :aware-tests:assembleDebug
+adb install -r aware-tests/build/outputs/apk/debug/aware-tests-debug.apk
+```
+
+- **`assembleDebug`** — builds only the `aware-tests` APK (main menu + View data + exports).
+- **`adb install -r`** — reinstalls over the existing app; keeps app data unless you wiped the emulator.
+
+Full project build + main phone app (not required for ScreenText test flow):
+
+```bash
+./build-and-install.sh
+```
+
+That installs `aware-phone-debug.apk` (ABI-specific name under `aware-phone/build/outputs/apk/debug/`). For **AWARE-tests** ScreenText, use the `aware-tests` commands above.
+
+---
+
+## 8. Emulator: start, list AVDs, factory reset
+
+**Paths** (macOS default):
+
+```bash
+export ANDROID_HOME=~/Library/Android/sdk
+export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$PATH"
+```
+
+**Start emulator** (pick your AVD name from the list):
+
+```bash
+./start-emulator.sh
+# or
+./start-emulator.sh Medium_Phone_API_36.0
+# or
+emulator -avd Medium_Phone_API_36.0 &
+```
+
+**List AVDs:**
+
+```bash
+emulator -list-avds
+```
+
+**Check device is up:**
+
+```bash
+adb devices
+```
+
+**Factory reset (wipe all emulator user data)** — **close the emulator first**, then:
+
+```bash
+emulator -avd Medium_Phone_API_36.0 -wipe-data
+```
+
+Or in **Android Studio → Device Manager → ⋮ on the AVD → Wipe Data**.
+
+After a wipe: reinstall the app (`adb install …` above), re-enable **Accessibility** for AWARE Tests, and run ScreenText again.
+
+**More detail:** see `EMULATOR_SETUP.md` in the repo root.
