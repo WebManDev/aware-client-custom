@@ -37,6 +37,10 @@ MARKER = " - Google Search"
 # and < MAX_MS, suppress it.
 REVISIT_SUPPRESS_MIN_MS = 8_000
 REVISIT_SUPPRESS_MAX_MS = 60_000
+FLASHBACK_NEXT_WINDOW_MS = 2_500
+QUERY_FLASHBACK_MIN_GAP_MS = 90_000
+QUERY_FLASHBACK_MAX_GAP_MS = 900_000
+QUERY_FLASHBACK_NEXT_WINDOW_MS = 30_000
 
 # Extract the actual `ved` token. In AWARE ScreenText blobs the `ved=` parameter
 # is often immediately followed by "***Rect(...", and sometimes there is no '&'
@@ -147,7 +151,40 @@ def extract_chrome_events(
         events.append((ts, query, sig))
 
     conn.close()
-    return events
+
+    # Post-filter "query flashback" noise:
+    # sometimes a previously seen query reappears briefly right before the
+    # real next query. If a repeated query is followed very quickly by a
+    # different query, drop that repeated one.
+    seen_queries: set[str] = set()
+    last_seen_ts_by_query: dict[str, int] = {}
+    filtered: list[tuple[int, str, str]] = []
+    for i, (ts, query, sig) in enumerate(events):
+        next_event = events[i + 1] if i + 1 < len(events) else None
+        if query in seen_queries and next_event is not None:
+            next_ts, next_query, _next_sig = next_event
+            if next_query != query and (next_ts - ts) <= FLASHBACK_NEXT_WINDOW_MS:
+                continue
+
+        # Suppress late query flashbacks:
+        # the same old query can briefly reappear minutes later while navigating,
+        # then quickly transitions to a different new query.
+        prev_q_ts = last_seen_ts_by_query.get(query)
+        if prev_q_ts is not None and next_event is not None:
+            next_ts, next_query, _next_sig = next_event
+            q_gap = ts - prev_q_ts
+            if (
+                next_query != query
+                and QUERY_FLASHBACK_MIN_GAP_MS <= q_gap < QUERY_FLASHBACK_MAX_GAP_MS
+                and (next_ts - ts) <= QUERY_FLASHBACK_NEXT_WINDOW_MS
+            ):
+                continue
+
+        filtered.append((ts, query, sig))
+        seen_queries.add(query)
+        last_seen_ts_by_query[query] = ts
+
+    return filtered
 
 
 if __name__ == "__main__":
