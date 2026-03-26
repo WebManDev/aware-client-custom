@@ -17,13 +17,26 @@
 4. `basketball soccer football,. joel embiid!.?<>`
 5. `>>>< < my mega and big mcdonald`
 
-## Completed search queries (in order) Session 3 [Google] [Typed quickly within 10-15 seconds] (Not done)
+## Completed search queries (in order) Session 3 [Google] [Typed quickly within 10-15 seconds, also did other activities] (Not done)
 
-1. `dog`
-2. `dog` (intentional repeat with a short pause)
-3. `cat`
-4. `dog`
-5. `cat` (first `cat` and last `cat` spaced differently)
-6. `cat`
-7. `cat`
 
+1. elapse
+2. donald 
+3. chocolate cake
+4. Australia
+5. Stockpile of meat
+6. reddit
+
+
+
+## Completed search queries (in order) Session 1 [Bing] [Typed quickly within 10-15 seconds, also did other activities] (Not done)
+
+  1. kangaroo
+  2. gooogle chrome
+  3. who is the tallest human in history?
+
+  ## Completed search queries (in order) Session 1 [Yahoo] [Typed quickly within 10-15 seconds, also did other activities] (Not done)
+
+  1. sixers
+  2. lakers
+  3. celtics wowsers
