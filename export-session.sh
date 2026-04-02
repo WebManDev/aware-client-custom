@@ -15,6 +15,7 @@
 #
 set -euo pipefail
 
+_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ADB="${ADB:-$(command -v adb 2>/dev/null || echo "$HOME/Library/Android/sdk/platform-tools/adb")}"
 DEST_DIR="./screentext_dbs"
 
@@ -36,7 +37,13 @@ mkdir -p "$DEST_DIR"
 
 # --- Step 1: snapshot which files exist before export ---
 echo "Checking emulator..."
-"$ADB" shell "echo ok" >/dev/null 2>&1 || { echo "Error: no emulator/device connected. Run: ~/Library/Android/sdk/emulator/emulator -avd Medium_Phone_API_36.0 &"; exit 1; }
+"$ADB" shell "echo ok" >/dev/null 2>&1 || {
+    echo "Error: no emulator/device connected."
+    echo "  Start the AVD with public DNS (fixes Yahoo DNS errors):"
+    echo "    bash ${_SCRIPT_DIR}/start-emulator.sh"
+    echo "  Or open Android Studio and add to the AVD's extra flags: -dns-server 8.8.8.8,1.1.1.1"
+    exit 1
+  }
 
 BEFORE=$("$ADB" shell "run-as com.aware.tests ls files/" 2>/dev/null | grep '\.db$' | sort)
 
@@ -71,7 +78,7 @@ fi
 
 # --- Step 5: extract and show ---
 echo ""
-python3 extract_searches.py "$DEST_FILE"
+python3 extract_searches.py "$DEST_FILE" --engine all
 
 echo ""
 echo "Saved to: ${DEST_FILE}"

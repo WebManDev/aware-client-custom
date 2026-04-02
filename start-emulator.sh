@@ -1,12 +1,11 @@
 #!/bin/bash
 
 # Script to start Android emulator for testing TimeLatency
-# This script sets up the Android SDK paths and launches the emulator
+# Uses emulator-dns.inc.sh: -dns-server 8.8.8.8,1.1.1.1 (override with EMULATOR_DNS_SERVERS).
 
-# Set Android SDK path
-export ANDROID_HOME=~/Library/Android/sdk
-export ANDROID_SDK_ROOT=~/Library/Android/sdk
-export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$PATH
+_REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=emulator-dns.inc.sh
+source "$_REPO/emulator-dns.inc.sh"
 
 # Check if emulator exists
 if [ ! -f "$ANDROID_HOME/emulator/emulator" ]; then
@@ -21,7 +20,7 @@ $ANDROID_HOME/emulator/emulator -list-avds
 # Check if AVD name is provided as argument
 if [ -z "$1" ]; then
     # Use the first available AVD or default
-    AVD_NAME=$(~/Library/Android/sdk/emulator/emulator -list-avds | head -1)
+    AVD_NAME=$("$ANDROID_HOME/emulator/emulator" -list-avds | head -1)
     if [ -z "$AVD_NAME" ]; then
         echo "Error: No AVD found. Please create an AVD first."
         echo "You can create one using Android Studio or the command line."
@@ -33,9 +32,9 @@ else
 fi
 
 # Start the emulator
-echo "Starting emulator: $AVD_NAME"
+echo "Starting emulator: $AVD_NAME (dns-server: $EMULATOR_DNS_SERVERS)"
 echo "This may take a minute or two..."
-$ANDROID_HOME/emulator/emulator -avd "$AVD_NAME" &
+$ANDROID_HOME/emulator/emulator -avd "$AVD_NAME" -dns-server "$EMULATOR_DNS_SERVERS" &
 
 # Wait for emulator to boot
 echo "Waiting for emulator to boot..."
